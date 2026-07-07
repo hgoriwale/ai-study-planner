@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Your Study Plan{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>Study Plan — Exam on {{ plan['exam_date'] }}</h4>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-sm btn-outline-secondary">&larr; Back to Dashboard</a>
+</div>
+
+{% for day in days %}
+<div class="card mb-3 shadow-sm {% if day['session_type'] == 'revision' %}revision-day{% endif %}">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+            <h5 class="card-title mb-1">
+                Day {{ day['day_number'] }} — {{ day['date'] }}
+                {% if day['session_type'] == 'revision' %}
+                    <span class="badge bg-warning text-dark ms-2">Revision</span>
+                {% else %}
+                    <span class="badge bg-primary ms-2">Study</span>
+                {% endif %}
+            </h5>
+        </div>
+        <table class="table table-sm mt-2">
+            <thead>
+                <tr><th>Subject</th><th>Hours</th></tr>
+            </thead>
+            <tbody>
+                {% for sess in day['sessions'] %}
+                <tr>
+                    <td>{{ sess['subject'] }}</td>
+                    <td>{{ sess['hours'] }} hrs</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p class="mb-0 tip-text">💡 {{ day['tip'] }}</p>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
